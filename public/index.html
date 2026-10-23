@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TrustVault — Secure Enterprise Document Sharing & Access Control</title>
+  <meta name="description" content="Secure, tenant-isolated document sharing platform for modern teams with strict role-based access control and tamper-evident audit logging.">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="bg-glow"></div>
+
+  <header class="app-header">
+    <a href="/" class="brand-wrap">
+      <div class="brand-icon">TV</div>
+      <div class="brand-name">Trust<span>Vault</span></div>
+    </a>
+    <nav class="nav-links">
+      <a href="/login" class="btn btn-secondary btn-sm" id="nav-login-btn">Sign In</a>
+      <a href="/login?tab=register" class="btn btn-primary btn-sm" id="nav-register-btn">Get Started</a>
+    </nav>
+  </header>
+
+  <main class="container" style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; min-height: 75vh;">
+    <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(0, 245, 160, 0.1); border: 1px solid rgba(0, 245, 160, 0.25); border-radius: 9999px; padding: 0.35rem 0.85rem; font-size: 0.8rem; font-weight: 600; color: var(--accent-primary); margin-bottom: 1.5rem;">
+      <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent-primary);"></span>
+      Single Deployment • Multi-Tenant RBAC • Zero Static Asset Leaks
+    </div>
+
+    <h1 style="font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.15; max-width: 850px; margin-bottom: 1.25rem;">
+      Enterprise document security without the vulnerability surface.
+    </h1>
+
+    <p style="font-size: 1.1rem; color: var(--text-muted); max-width: 650px; margin-bottom: 2.25rem;">
+      TrustVault guarantees strict tenant isolation, role-based access control, private file storage, and immutable audit logs. Built from scratch with a unified Node.js architecture.
+    </p>
+
+    <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; margin-bottom: 4rem;">
+      <a href="/login?tab=register" class="btn btn-primary" style="padding: 0.8rem 1.75rem; font-size: 1rem;" id="hero-get-started-btn">
+        Create Organization
+      </a>
+      <a href="/login" class="btn btn-secondary" style="padding: 0.8rem 1.75rem; font-size: 1rem;" id="hero-login-btn">
+        Sign In to Vault
+      </a>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; width: 100%; text-align: left;">
+      <div class="card">
+        <div style="color: var(--accent-primary); font-size: 1.5rem; margin-bottom: 0.75rem;">🛡️</div>
+        <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem;">Multi-Tenant Isolation</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">
+          Strict relational boundaries guarantee documents from one organization are completely invisible and inaccessible to any unauthorized external tenant.
+        </p>
+      </div>
+
+      <div class="card">
+        <div style="color: var(--accent-secondary); font-size: 1.5rem; margin-bottom: 0.75rem;">🔒</div>
+        <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem;">Private Storage Guard</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">
+          Uploaded documents are never exposed as public static files. Every download or inline preview undergoes server-side cryptographic and permission validation.
+        </p>
+      </div>
+
+      <div class="card">
+        <div style="color: var(--accent-primary); font-size: 1.5rem; margin-bottom: 0.75rem;">📜</div>
+        <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem;">Immutable Audit Logs</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">
+          Every sensitive action — login, upload, download, share, and revocation — is timestamped and recorded in an immutable audit trail.
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <footer style="border-top: 1px solid var(--border-subtle); padding: 1.5rem; text-align: center; font-size: 0.8rem; color: var(--text-dim);">
+    TrustVault &copy; 2026. Certified Single-Application Architecture.
+  </footer>
+
+  <script>
+    // Redirect authenticated users directly to dashboard
+    fetch('/api/auth/me')
+      .then(r => r.json())
+      .then(data => {
+        if (data.authenticated) {
+          const navBtn = document.getElementById('nav-login-btn');
+          if (navBtn) {
+            navBtn.textContent = 'Open Dashboard';
+            navBtn.href = '/dashboard';
+            navBtn.className = 'btn btn-primary btn-sm';
+          }
+          const regBtn = document.getElementById('nav-register-btn');
+          if (regBtn) regBtn.style.display = 'none';
+          const heroBtn = document.getElementById('hero-get-started-btn');
+          if (heroBtn) {
+            heroBtn.textContent = 'Go to Dashboard';
+            heroBtn.href = '/dashboard';
+          }
+        }
+      })
+      .catch(() => {});
+  </script>
+</body>
+</html>

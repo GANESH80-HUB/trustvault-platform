@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TrustVault — Documents</title>
+  <meta name="description" content="Secure document storage, sharing, and permission management.">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="bg-glow"></div>
+
+  <!-- Header -->
+  <header class="app-header">
+    <a href="/dashboard" class="brand-wrap">
+      <div class="brand-icon">TV</div>
+      <div class="brand-name">Trust<span>Vault</span></div>
+    </a>
+    <nav class="nav-links">
+      <a href="/dashboard" class="nav-link">Dashboard</a>
+      <a href="/documents" class="nav-link active">Documents</a>
+      <a href="/audit" class="nav-link" id="nav-audit-link">Audit Trail</a>
+    </nav>
+    <div id="user-nav-container" class="flex-gap">
+      <!-- Injected via auth.js -->
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Document Repository</h1>
+        <p class="page-subtitle">Authorized files, cryptographic access control, and granular sharing</p>
+      </div>
+      <div>
+        <button id="page-upload-btn" class="btn btn-primary" onclick="openUploadModal()">
+          <span>+</span> Upload Document
+        </button>
+      </div>
+    </div>
+
+    <!-- Filter & Search Bar -->
+    <div class="card" style="margin-bottom: 1.5rem; padding: 1rem 1.25rem;">
+      <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 250px;">
+          <input type="text" id="search-input" class="form-input" placeholder="Search documents by name or keyword...">
+        </div>
+        <div style="width: 200px;">
+          <select id="filter-select" class="form-select">
+            <option value="all">All Accessible Files</option>
+            <option value="owned">Uploaded by Me</option>
+            <option value="shared">Shared with Me</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Documents Table -->
+    <div class="card">
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Document</th>
+              <th>Size</th>
+              <th>Owner</th>
+              <th>Access</th>
+              <th>Sharing</th>
+              <th>Date</th>
+              <th class="text-right">Operations</th>
+            </tr>
+          </thead>
+          <tbody id="documents-tbody">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+
+      <div id="documents-empty" class="empty-state" style="display: none;">
+        <div class="empty-icon">📂</div>
+        <div class="empty-title">No documents found</div>
+        <div class="empty-text">No documents match your filter criteria or repository is empty</div>
+        <button class="btn btn-primary btn-sm" onclick="openUploadModal()">Upload Document</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Upload Modal -->
+  <div id="upload-modal" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h2 class="modal-title">Upload Secure Document</h2>
+        <button class="modal-close" onclick="closeUploadModal()">&times;</button>
+      </div>
+      <form id="upload-form">
+        <div class="form-group">
+          <label class="form-label" for="upload-file">Select File</label>
+          <input type="file" id="upload-file" class="form-input" required>
+          <div class="form-help">Supported: PDF, DOCX, XLSX, PPTX, CSV, TXT, MD, Images, ZIP (Max 20MB)</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="upload-desc">Description (Optional)</label>
+          <textarea id="upload-desc" class="form-textarea" rows="3" placeholder="Context, project reference, or confidentiality notice..."></textarea>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+          <button type="button" class="btn btn-secondary" onclick="closeUploadModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Upload Document</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Share Modal -->
+  <div id="share-modal" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h2 class="modal-title">Manage Document Access</h2>
+        <button class="modal-close" onclick="closeShareModal()">&times;</button>
+      </div>
+
+      <div style="margin-bottom: 1.25rem;">
+        <div style="font-size: 0.8rem; color: var(--text-muted);">Document</div>
+        <div id="share-modal-doc-name" style="font-weight: 700; color: var(--accent-primary); font-size: 1.05rem;">—</div>
+      </div>
+
+      <!-- Add Share Form -->
+      <form id="share-form" style="margin-bottom: 1.75rem; background: #080c14; padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+        <h3 style="font-size: 0.95rem; font-weight: 600; margin-bottom: 0.85rem;">Share with Organization Colleague</h3>
+        <div class="form-group">
+          <label class="form-label" for="share-email">Member Email</label>
+          <input type="email" id="share-email" class="form-input" placeholder="colleague@yourcompany.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="share-permission">Permission</label>
+          <select id="share-permission" class="form-select">
+            <option value="viewer">Viewer (Read & Download)</option>
+            <option value="editor">Editor (Read, Download & Share)</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary w-full">Grant Access</button>
+      </form>
+
+      <!-- Existing Shares -->
+      <div>
+        <h3 style="font-size: 0.95rem; font-weight: 600; margin-bottom: 0.5rem;">Active Member Shares</h3>
+        <div id="shares-list-container">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Preview Modal -->
+  <div id="preview-modal" class="modal-overlay">
+    <div class="modal-dialog" style="max-width: 900px; width: 95%;">
+      <div class="modal-header">
+        <h2 id="preview-title" class="modal-title">Document Preview</h2>
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <a id="preview-download-link" href="#" class="btn btn-secondary btn-sm">Download File</a>
+          <button class="modal-close" onclick="closePreviewModal()">&times;</button>
+        </div>
+      </div>
+      <div id="preview-body" style="min-height: 200px;">
+        <!-- Injected via previewDocument -->
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/auth.js"></script>
+  <script src="/js/documents.js"></script>
+</body>
+</html>

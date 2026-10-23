@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TrustVault — Sign In & Registration</title>
+  <meta name="description" content="Secure portal access for TrustVault enterprise document management.">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body style="justify-content: center; align-items: center; padding: 1.5rem;">
+  <div class="bg-glow"></div>
+
+  <div style="width: 100%; max-width: 440px; position: relative; z-index: 1;">
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <a href="/" class="brand-wrap" style="display: inline-flex;">
+        <div class="brand-icon">TV</div>
+        <div class="brand-name" style="font-size: 1.4rem;">Trust<span>Vault</span></div>
+      </a>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">
+        Isolated & Encrypted Enterprise Storage
+      </p>
+    </div>
+
+    <div class="card" style="padding: 2rem;">
+      <!-- Tab Selector -->
+      <div style="display: flex; background: #080c14; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 0.25rem; margin-bottom: 1.75rem;">
+        <button type="button" id="tab-login-btn" class="btn btn-sm active" style="flex: 1; border-radius: 4px; border: none; background: transparent; color: var(--text-main); font-weight: 600;">
+          Sign In
+        </button>
+        <button type="button" id="tab-register-btn" class="btn btn-sm" style="flex: 1; border-radius: 4px; border: none; background: transparent; color: var(--text-muted); font-weight: 600;">
+          Register
+        </button>
+      </div>
+
+      <!-- Login Form -->
+      <form id="login-form">
+        <div class="form-group">
+          <label class="form-label" for="login-email">Email Address</label>
+          <input type="email" id="login-email" class="form-input" placeholder="name@company.com" required autocomplete="email">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="login-password">Password</label>
+          <input type="password" id="login-password" class="form-input" placeholder="••••••••" required autocomplete="current-password">
+        </div>
+
+        <button type="submit" class="btn btn-primary w-full" style="margin-top: 0.5rem;" id="login-submit-btn">
+          Sign In to Vault
+        </button>
+      </form>
+
+      <!-- Register Form -->
+      <form id="register-form" style="display: none;">
+        <div class="form-group">
+          <label class="form-label" for="register-name">Full Name</label>
+          <input type="text" id="register-name" class="form-input" placeholder="Alex Vance" required autocomplete="name">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="register-org">Organization Name</label>
+          <input type="text" id="register-org" class="form-input" placeholder="Acme Cyber Corp" required>
+          <div class="form-help">Creates a new isolated tenant organization (Admin role)</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="register-email">Work Email</label>
+          <input type="email" id="register-email" class="form-input" placeholder="alex@acmecorp.com" required autocomplete="email">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="register-password">Master Password</label>
+          <input type="password" id="register-password" class="form-input" placeholder="Min. 8 chars (letters & numbers)" required autocomplete="new-password">
+          <div class="form-help">Must contain at least 8 characters with letters & numbers</div>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-full" style="margin-top: 0.5rem;" id="register-submit-btn">
+          Create Account & Organization
+        </button>
+      </form>
+    </div>
+
+    <div style="text-align: center; margin-top: 1.5rem; font-size: 0.8rem; color: var(--text-dim);">
+      <a href="/" style="color: var(--text-muted); text-decoration: none;">&larr; Back to Home</a>
+    </div>
+  </div>
+
+  <script src="/js/auth.js"></script>
+  <script>
+    // If already authenticated, redirect to dashboard
+    fetch('/api/auth/me')
+      .then(r => r.json())
+      .then(d => {
+        if (d.authenticated) window.location.href = '/dashboard';
+      })
+      .catch(() => {});
+  </script>
+</body>
+</html>

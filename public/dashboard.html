@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TrustVault — Dashboard</title>
+  <meta name="description" content="Tenant-isolated document overview and security metrics.">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="bg-glow"></div>
+
+  <!-- Main Navigation Header -->
+  <header class="app-header">
+    <a href="/dashboard" class="brand-wrap">
+      <div class="brand-icon">TV</div>
+      <div class="brand-name">Trust<span>Vault</span></div>
+    </a>
+    <nav class="nav-links">
+      <a href="/dashboard" class="nav-link active">Dashboard</a>
+      <a href="/documents" class="nav-link">Documents</a>
+      <a href="/audit" class="nav-link" id="nav-audit-link">Audit Trail</a>
+    </nav>
+    <div id="user-nav-container" class="flex-gap">
+      <!-- Injected via auth.js -->
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Workspace Dashboard</h1>
+        <p class="page-subtitle">Real-time tenant metrics and document repository status</p>
+      </div>
+      <div>
+        <a href="/documents?action=upload" class="btn btn-primary" id="dash-upload-btn">
+          <span>+</span> Upload Document
+        </a>
+      </div>
+    </div>
+
+    <!-- Live KPI Metrics -->
+    <div class="stats-grid">
+      <div class="card stat-card">
+        <span class="stat-label">Organization Documents</span>
+        <span class="stat-value" id="stat-total-docs">—</span>
+        <span class="stat-sub">Total files in tenant boundary</span>
+      </div>
+      <div class="card stat-card">
+        <span class="stat-label">Total Vault Storage</span>
+        <span class="stat-value" id="stat-storage-used">—</span>
+        <span class="stat-sub">Private persistent disk footprint</span>
+      </div>
+      <div class="card stat-card">
+        <span class="stat-label">Uploaded By You</span>
+        <span class="stat-value" id="stat-uploaded-by-me">—</span>
+        <span class="stat-sub">Documents you own</span>
+      </div>
+      <div class="card stat-card">
+        <span class="stat-label">Shared With You</span>
+        <span class="stat-value" id="stat-shared-with-me">—</span>
+        <span class="stat-sub">Explicit authorized shares</span>
+      </div>
+    </div>
+
+    <!-- Recent Documents Table -->
+    <div class="card" style="margin-bottom: 2rem;">
+      <div class="flex-between" style="margin-bottom: 1.25rem;">
+        <h2 style="font-size: 1.15rem; font-weight: 700;">Recent Documents</h2>
+        <a href="/documents" class="btn btn-secondary btn-sm">View All Documents &rarr;</a>
+      </div>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Document Name</th>
+              <th>Size</th>
+              <th>Uploaded By</th>
+              <th>Access Level</th>
+              <th>Date</th>
+              <th class="text-right">Action</th>
+            </tr>
+          </thead>
+          <tbody id="recent-docs-tbody">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+
+      <div id="recent-docs-empty" class="empty-state" style="display: none;">
+        <div class="empty-icon">📁</div>
+        <div class="empty-title">No documents uploaded yet</div>
+        <div class="empty-text">Securely upload your first file to get started</div>
+        <a href="/documents?action=upload" class="btn btn-primary btn-sm">Upload File Now</a>
+      </div>
+    </div>
+
+    <!-- Admin Recent Activity (Visible only to Admin) -->
+    <div id="admin-activity-section" class="card" style="display: none;">
+      <div class="flex-between" style="margin-bottom: 1.25rem;">
+        <h2 style="font-size: 1.15rem; font-weight: 700;">Security Audit Snapshot</h2>
+        <a href="/audit" class="btn btn-secondary btn-sm">Full Audit Trail &rarr;</a>
+      </div>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Event Action</th>
+              <th>Actor</th>
+              <th>Resource</th>
+              <th>Timestamp</th>
+            </tr>
+          </thead>
+          <tbody id="recent-activity-tbody">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+
+      <div id="recent-activity-empty" class="empty-state" style="display: none;">
+        <div class="empty-icon">🛡️</div>
+        <div class="empty-title">No recent audit events</div>
+        <div class="empty-text">Security events will appear as team members interact with the vault</div>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/auth.js"></script>
+  <script src="/js/dashboard.js"></script>
+</body>
+</html>
